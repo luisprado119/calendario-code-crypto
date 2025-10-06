@@ -60,11 +60,18 @@ function getCurrentWeek() {
     const dates = calculateDates();
     const daysSinceStart = dates.daysSinceStart;
     
+    // Debug: mostrar información en consola
+    console.log('Debug - Fecha de inicio:', dates.startDate.toLocaleDateString('es-ES'));
+    console.log('Debug - Fecha actual:', dates.today.toLocaleDateString('es-ES'));
+    console.log('Debug - Días desde inicio:', daysSinceStart);
+    
     if (daysSinceStart < 0) {
+        console.log('Debug - Curso no iniciado, días hasta inicio:', Math.abs(daysSinceStart));
         return { week: 0, status: 'upcoming', daysUntilStart: Math.abs(daysSinceStart) };
     }
     
     const currentWeek = Math.floor(daysSinceStart / 7) + 1;
+    console.log('Debug - Semana calculada:', currentWeek);
     
     // Determinar el estado
     let status = 'upcoming';
