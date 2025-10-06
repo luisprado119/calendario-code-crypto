@@ -16,7 +16,7 @@ const courseData = {
         { number: 13, topic: "SQL Introducción", duration: 1 },
         { number: 14, topic: "Web Server con NodeJS", duration: 1 },
         { number: 15, topic: "Docker", duration: 1 },
-        { number: 16, topic: "Proyecto Gal", duration: 1 },
+        { number: 16, topic: "Proyecto SQL", duration: 1 },
         { number: 17, topic: "ReactJS", duration: 2 },
         { number: 19, topic: "Intro a NextJS", duration: 1 },
         { number: 20, topic: "Proyecto Faucet Geth", duration: 1 },
