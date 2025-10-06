@@ -3,42 +3,36 @@ const courseData = {
     startDate: new Date(2025, 7, 18), // 18 de agosto de 2025 (mes 7 = agosto, 0-indexado)
     durationMonths: 9,
     weeks: [
-        { number: 1, topic: "Bienvenido a Code Crypto" },
-        { number: 2, topic: "Fundamentos de Software" },
-        { number: 3, topic: "Fundamentos de Software" },
-        { number: 4, topic: "Diagramas de Flujo Algorítmico I" },
-        { number: 5, topic: "Diagramas de Flujo Algorítmico II" },
-        { number: 6, topic: "JavaScript I" },
-        { number: 7, topic: "JavaScript I" },
-        { number: 8, topic: "JavaScript Avanzado" },
-        { number: 9, topic: "JavaScript Avanzado" },
-        { number: 10, topic: "TypeScript" },
-        { number: 11, topic: "Diseño Web" },
-        { number: 12, topic: "Proyecto React (Diseño)" },
-        { number: 13, topic: "SQL Introducción" },
-        { number: 14, topic: "Web Server con NodeJS" },
-        { number: 15, topic: "Docker" },
-        { number: 16, topic: "Proyecto Gal" },
-        { number: 17, topic: "ReactJS" },
-        { number: 18, topic: "ReactJS" },
-        { number: 19, topic: "Intro a NextJS" },
-        { number: 20, topic: "Proyecto Faucet Geth" },
-        { number: 21, topic: "Proyecto Faucet Besu" },
-        { number: 22, topic: "Semana de descanso" },
-        { number: 23, topic: "Semana de descanso" },
-        { number: 24, topic: "Semana de descanso" },
-        { number: 25, topic: "Semana de descanso" },
-        { number: 26, topic: "Semana de descanso" },
-        { number: 27, topic: "Semana de descanso" },
-        { number: 28, topic: "Ethereum Fundamentos" },
-        { number: 29, topic: "Proyecto Cesta" },
-        { number: 30, topic: "Proyecto Explorer & Proyecto Crypto" },
-        { number: 31, topic: "Proyecto Ethereum" },
-        { number: 32, topic: "Proyecto Besu" },
-        { number: 33, topic: "Proyecto Final: Tokenización" },
-        { number: 34, topic: "Proyecto Final: Tokenización" },
-        { number: 35, topic: "Proyecto Final: Tokenización" },
-        { number: 36, topic: "Proyecto Final: Tokenización" }
+        { number: 1, topic: "Bienvenido a Code Crypto", duration: 1 },
+        { number: 2, topic: "Fundamentos de Software", duration: 2 },
+        { number: 4, topic: "Diagramas de Flujo Algorítmico I", duration: 1 },
+        { number: 5, topic: "Diagramas de Flujo Algorítmico II", duration: 1 },
+        { number: 6, topic: "JavaScript I", duration: 1 },
+        { number: 7, topic: "JavaScript II", duration: 1 },
+        { number: 8, topic: "JavaScript Avanzado", duration: 2 },
+        { number: 10, topic: "TypeScript", duration: 1 },
+        { number: 11, topic: "Diseño Web", duration: 1 },
+        { number: 12, topic: "Proyecto React (Diseño)", duration: 1 },
+        { number: 13, topic: "SQL Introducción", duration: 1 },
+        { number: 14, topic: "Web Server con NodeJS", duration: 1 },
+        { number: 15, topic: "Docker", duration: 1 },
+        { number: 16, topic: "Proyecto Gal", duration: 1 },
+        { number: 17, topic: "ReactJS", duration: 2 },
+        { number: 19, topic: "Intro a NextJS", duration: 1 },
+        { number: 20, topic: "Proyecto Faucet Geth", duration: 1 },
+        { number: 21, topic: "Proyecto Faucet Besu", duration: 1 },
+        { number: 22, topic: "Contenido Adicional I", duration: 1 },
+        { number: 23, topic: "Contenido Adicional II", duration: 1 },
+        { number: 24, topic: "Contenido Adicional III", duration: 1 },
+        { number: 25, topic: "Contenido Adicional IV", duration: 1 },
+        { number: 26, topic: "Contenido Adicional V", duration: 1 },
+        { number: 27, topic: "Contenido Adicional VI", duration: 1 },
+        { number: 28, topic: "Ethereum Fundamentos", duration: 1 },
+        { number: 29, topic: "Proyecto Cesta", duration: 1 },
+        { number: 30, topic: "Proyecto Explorer & Proyecto Crypto", duration: 1 },
+        { number: 31, topic: "Proyecto Ethereum", duration: 1 },
+        { number: 32, topic: "Proyecto Besu", duration: 1 },
+        { number: 33, topic: "Proyecto Final: Tokenización", duration: 4 }
     ]
 };
 
@@ -90,12 +84,34 @@ function getWeekInfo(weekNumber) {
     const weekEndDate = new Date(weekStartDate);
     weekEndDate.setDate(weekEndDate.getDate() + 6);
     
-    // Encontrar el tema de la semana
-    let weekTopic = "Semana de descanso";
+    // Encontrar el tema de la semana - buscar si esta semana pertenece a algún bloque
+    let weekTopic = "Contenido Adicional";
+    let weekDuration = 1;
+    let isPartOfBlock = false;
     
-    const weekData = courseData.weeks.find(w => w.number === weekNumber);
-    if (weekData) {
-        weekTopic = weekData.topic;
+    // Buscar si esta semana es parte de un bloque de múltiples semanas
+    for (const weekData of courseData.weeks) {
+        if (weekNumber >= weekData.number && weekNumber < weekData.number + weekData.duration) {
+            weekTopic = weekData.topic;
+            weekDuration = weekData.duration;
+            isPartOfBlock = true;
+            
+            // Si es parte de un bloque, agregar indicador
+            if (weekData.duration > 1) {
+                const weekInBlock = weekNumber - weekData.number + 1;
+                weekTopic += ` (Parte ${weekInBlock}/${weekData.duration})`;
+            }
+            break;
+        }
+    }
+    
+    // Si no es parte de un bloque, verificar si hay tema específico
+    if (!isPartOfBlock) {
+        const weekData = courseData.weeks.find(w => w.number === weekNumber);
+        if (weekData) {
+            weekTopic = weekData.topic;
+            weekDuration = weekData.duration;
+        }
     }
     
     // Determinar el estado de la semana
@@ -106,8 +122,6 @@ function getWeekInfo(weekNumber) {
         status = 'completed';
     } else if (weekNumber === currentWeek.week) {
         status = 'current';
-    } else if (weekNumber > currentWeek.week + 1) {
-        status = 'upcoming';
     } else {
         status = 'upcoming';
     }
@@ -117,7 +131,8 @@ function getWeekInfo(weekNumber) {
         topic: weekTopic,
         startDate: weekStartDate,
         endDate: weekEndDate,
-        status: status
+        status: status,
+        duration: weekDuration
     };
 }
 
